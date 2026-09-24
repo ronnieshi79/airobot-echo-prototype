@@ -1,0 +1,10 @@
+{
+  "name": "AIRobot ECHO+",
+  "description": "AI驱动、拟物化风格的AI机器人助理应用（功能性应用）。支持基于场景与情境的功能性智能体AI闹钟、定时器和专注计时及日程服务",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

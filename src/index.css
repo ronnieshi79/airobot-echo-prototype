@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply transition-colors duration-500;
+  }
+}
+
+@layer utilities {
+  /* Light Mode Neumorphism */
+  .bg-light { background-color: #f0f2f5; }
+  .bg-mint-light {
+    background: radial-gradient(circle at 50% 35%, #f6fcf9 0%, #ebf8f2 55%, #e1f5ed 100%);
+  }
+  .bg-mint-dark {
+    background: radial-gradient(circle at 50% 35%, #152223 0%, #0d181a 55%, #070d0f 100%);
+  }
+  .neu-flat-light {
+    background: #f0f2f5;
+    box-shadow: 12px 12px 24px #d1d9e6, -12px -12px 24px #ffffff;
+  }
+  .neu-inset-light {
+    background: #f0f2f5;
+    box-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
+  }
+  .neu-button-light {
+    background: #f0f2f5;
+    box-shadow: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+    @apply active:shadow-inner transition-all duration-200;
+  }
+
+  /* Dark Mode Neumorphism */
+  .bg-dark { background-color: #1a1c2c; }
+  .neu-flat-dark {
+    background: #1a1c2c;
+    box-shadow: 10px 10px 20px #0d0e16, -10px -10px 20px #272a42;
+  }
+  .neu-inset-dark {
+    background: #1a1c2c;
+    box-shadow: inset 6px 6px 12px #0d0e16, inset -6px -6px 12px #272a42;
+  }
+  .neu-button-dark {
+    background: #1a1c2c;
+    box-shadow: 6px 6px 12px #0d0e16, -6px -6px 12px #272a42;
+    @apply active:shadow-inner transition-all duration-200;
+  }
+
+  /* Stopwatch Specific Styles */
+  .stopwatch-outer {
+    @apply relative rounded-full flex items-center justify-center transition-all duration-500;
+    background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+    box-shadow: 12px 12px 24px rgba(0,0,0,0.05), -12px -12px 24px rgba(255,255,255,0.8);
+    border: 8px solid var(--ring-color, #f1f5f9);
+  }
+  
+  .stopwatch-inner {
+    @apply rounded-full bg-white flex flex-col items-center justify-center relative transition-all duration-500;
+    box-shadow: inset 8px 8px 16px rgba(0,0,0,0.05), inset -8px -8px 16px rgba(255,255,255,0.8);
+    border: 1px solid rgba(0,0,0,0.02);
+  }
+
+  .stopwatch-outer-dark {
+    @apply relative rounded-full flex items-center justify-center transition-all duration-500;
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    box-shadow: 12px 12px 24px rgba(0,0,0,0.3), -12px -12px 24px rgba(255,255,255,0.05);
+    border: 8px solid var(--ring-color, #334155);
+  }
+
+  .stopwatch-inner-dark {
+    @apply rounded-full bg-slate-900 flex flex-col items-center justify-center relative transition-all duration-500;
+    box-shadow: inset 8px 8px 16px rgba(0,0,0,0.4), inset -8px -8px 16px rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .stopwatch-button-top {
+    @apply absolute -top-8 w-20 h-10 rounded-t-2xl;
+    background: linear-gradient(to bottom, #ff9900, #ffcc33);
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  /* Robot & Chat Styles */
+  .robot-head {
+    @apply w-32 h-32 rounded-[3.5rem] flex flex-col items-center justify-center relative;
+    box-shadow: 15px 15px 30px rgba(0,0,0,0.1);
+  }
+
+  .robot-ear-left, .robot-ear-right {
+    @apply absolute w-6 h-12 rounded-full -z-10;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.1);
+  }
+  .robot-ear-left { @apply -left-3 top-1/2 -translate-y-1/2; }
+  .robot-ear-right { @apply -right-3 top-1/2 -translate-y-1/2; }
+
+  .robot-eye {
+    @apply w-4 h-4 bg-slate-800 rounded-full relative overflow-hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  }
+  .robot-eye::after {
+    content: '';
+    @apply absolute top-1 left-1 w-1.5 h-1.5 bg-white rounded-full opacity-60;
+  }
+
+  .chat-bubble {
+    @apply bg-white/80 backdrop-blur-xl border border-white/40 rounded-[3rem] p-8 shadow-2xl;
+  }
+
+  .glass-button {
+    @apply bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl px-6 py-3 text-sm font-bold text-slate-800 hover:bg-white/40 transition-all shadow-sm;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes bounce-x {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+  }
+  .animate-bounce-x {
+    animation: bounce-x 1s infinite;
+  }
+}
