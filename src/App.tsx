@@ -51,9 +51,13 @@ import { MainCategory, SubCategory, ScheduleItem, TodoItem, Message, AlarmItem, 
 import { SkeuomorphicDial } from './components/SkeuomorphicDial';
 import { FunctionalModulePlate } from './components/FunctionalModulePlate';
 import { agentService } from './services/agentService';
-import { ContextCardCarousel } from './components/ContextCardCarousel';
-import { ContextSelector } from './components/ContextSelector';
-import { ContextType, detectAutoContext, getContextServiceSlices, ServiceSlice } from './services/contextEngine';
+import { 
+  useContextSlices, 
+  ContextCardCarousel, 
+  ContextSelector, 
+  ServiceSlice, 
+  ContextType 
+} from './context-slice';
 
 // Initialize Gemini
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
@@ -68,10 +72,6 @@ export default function App() {
   const [isPlannerOpen, setIsPlannerOpen] = useState(false);
   const [plannerInitialItem, setPlannerInitialItem] = useState<ScheduleItem | TodoItem | undefined>(undefined);
   
-  // Context-Aware Recommendation System
-  const [selectedContext, setSelectedContext] = useState<ContextType | 'auto'>('auto');
-  const [activeSliceIndex, setActiveSliceIndex] = useState(0);
-
   const triggeredReminders = React.useRef<Set<string>>(new Set());
   const [lastRingingAlarmId, setLastRingingAlarmId] = useState<string | null>(null);
   
@@ -364,31 +364,20 @@ export default function App() {
     }
   }, [messages, conversationState]);
 
-  const effectiveContext: ContextType = selectedContext === 'auto'
-    ? detectAutoContext(time)
-    : selectedContext;
-
-  const { slices: contextSlices, primaryReason, primaryAction } = React.useMemo(() => {
-    return getContextServiceSlices({
-      context: effectiveContext,
-      now: time,
-      schedules,
-      todos,
-      episodes,
-      alarms,
-      isFocusRunning,
-      focusTime,
-      totalFocusSeconds,
-      isTimerRunning,
-      timerSeconds,
-      totalTimerSeconds,
-      isPlaying,
-      activeEpisode,
-      ringingAlarmId,
-    });
-  }, [
+  // Context Engine & Service Slices Sub-Module Hook
+  const {
+    selectedContext,
     effectiveContext,
-    time,
+    isAuto,
+    setSelectedContext,
+    slices: contextSlices,
+    activeSliceIndex,
+    setActiveSliceIndex,
+    currentSlice,
+    primaryReason,
+    primaryAction,
+  } = useContextSlices({
+    now: time,
     schedules,
     todos,
     episodes,
@@ -402,9 +391,7 @@ export default function App() {
     isPlaying,
     activeEpisode,
     ringingAlarmId,
-  ]);
-
-  const currentSlice = contextSlices[Math.max(0, Math.min(activeSliceIndex, contextSlices.length - 1))] || contextSlices[0];
+  });
 
   const handleOpenSlice = (slice: ServiceSlice) => {
     if (slice.targetOverlay === 'planner') {
@@ -1217,7 +1204,7 @@ export default function App() {
       <div className="fixed bottom-8 left-10 z-30 flex items-center gap-3 select-none">
         <ContextSelector
           currentContext={effectiveContext}
-          isAuto={selectedContext === 'auto'}
+          isAuto={isAuto}
           onSelectContext={setSelectedContext}
           isDarkMode={isDarkMode}
         />
@@ -1234,8 +1221,8 @@ export default function App() {
         </button>
       </div>
 
-      {/* Right Column: Airobot with 5 Cyan Dots & Voice Dialogue (Aligned with center stage matching Figure 2) */}
-      <aside className="fixed top-1/2 -translate-y-1/2 right-6 sm:right-10 md:right-14 lg:right-20 xl:right-28 z-30 flex flex-col items-center pointer-events-auto select-none">
+      {/* Right Column: Airobot with 5 Cyan Dots & Voice Dialogue (Matching Figure 2 Red Box position in lower-right) */}
+      <aside className="fixed bottom-[12vh] sm:bottom-[14vh] lg:bottom-[16vh] right-8 sm:right-12 md:right-16 lg:right-24 xl:right-32 z-30 flex flex-col items-center pointer-events-auto select-none">
         <AnimatePresence mode="wait">
           {isChatOpen ? (
             <motion.div
