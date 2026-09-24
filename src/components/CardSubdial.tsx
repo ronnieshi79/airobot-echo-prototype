@@ -6,7 +6,10 @@ import {
   Headphones, 
   BookOpen, 
   Sparkles, 
-  Activity
+  Activity,
+  CalendarDays,
+  Layers,
+  FolderOpen
 } from 'lucide-react';
 import { ServiceSlice } from '../services/agent/types';
 
@@ -21,10 +24,12 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
   isDarkMode,
   compact = false
 }) => {
-  const { subdial, type, isLiveDynamic, colorTheme } = slice;
+  const { subdial, type, isLiveDynamic, isStaticHub, colorTheme, targetOverlay } = slice;
 
   // Fallback subdial data if not explicitly passed
   const label = subdial?.label || (
+    targetOverlay === 'podcast_library' ? '知识节目库' :
+    targetOverlay === 'calendar_flex' ? '月度全景' :
     type === 'focus' ? '专注心流' :
     type === 'timer' ? '倒计时' :
     type === 'alarm' ? '闹钟' :
@@ -33,6 +38,8 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
   );
 
   const value = subdial?.value || (
+    targetOverlay === 'podcast_library' ? '12 专题' :
+    targetOverlay === 'calendar_flex' ? '全景矩阵' :
     type === 'focus' ? '25:00' :
     type === 'timer' ? '15:00' :
     type === 'alarm' ? '07:30' :
@@ -43,6 +50,13 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
   const renderIcon = () => {
     const iconSize = compact ? 18 : 26;
     const iconClass = `${colorTheme.iconColor || 'text-slate-600'} transition-transform group-hover:scale-110`;
+
+    if (targetOverlay === 'podcast_library' || slice.iconType === 'library') {
+      return <Layers size={iconSize} className={iconClass} />;
+    }
+    if (targetOverlay === 'calendar_flex') {
+      return <CalendarDays size={iconSize} className={iconClass} />;
+    }
 
     switch (slice.iconType) {
       case 'alarm':

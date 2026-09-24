@@ -185,7 +185,16 @@ export class CardDriver {
       };
     }
 
-    // 6. Intent: Schedule & Calendar Planner
+    // 6. Intent: Schedule & Calendar Planner / Monthly Calendar Matrix
+    if (lowerText.includes("月历") || lowerText.includes("整月") || lowerText.includes("月度") || lowerText.includes("全景日历") || lowerText.includes("本月安排")) {
+      this.executeAction({ type: 'OPEN_CARD', target: 'calendar_flex' });
+      return {
+        handled: true,
+        action: { type: 'OPEN_CARD', target: 'calendar_flex' },
+        replyText: '已为你打开 AI 月历全景矩阵，查看整月战略里程碑与节点。'
+      };
+    }
+
     if (lowerText.includes("日程") || lowerText.includes("安排") || lowerText.includes("待办") || lowerText.includes("日历")) {
       this.executeAction({ type: 'OPEN_SCHEDULE_PLANNER' });
       return {
@@ -195,7 +204,15 @@ export class CardDriver {
       };
     }
 
-    // 7. Intent: AI Podcast Generation / Playback
+    // 7. Intent: AI Podcast Generation / Playback / Library
+    if (lowerText.includes("节目库") || lowerText.includes("播客库") || lowerText.includes("全部播客") || lowerText.includes("知识库") || lowerText.includes("音频库")) {
+      this.executeAction({ type: 'OPEN_CARD', target: 'podcast_library' });
+      return {
+        handled: true,
+        action: { type: 'OPEN_CARD', target: 'podcast_library' },
+        replyText: '已为你打开 AI 播客知识节目库，沉浸探索已归档的深度专题与内参。'
+      };
+    }
     if (lowerText.includes("故事") || lowerText.includes("讲个故事") || lowerText.includes("童话") || lowerText.includes("催眠")) {
       this.executeAction({ type: 'PLAY_PODCAST', generateType: 'video', topic: lowerText });
       return {

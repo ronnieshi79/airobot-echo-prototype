@@ -69,6 +69,8 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
 
   const getCategoryLabel = (slice: ServiceSlice) => {
     if (slice.badge) return slice.badge;
+    if (slice.targetOverlay === 'podcast_library') return '知识节目库';
+    if (slice.targetOverlay === 'calendar_flex') return '月度全景';
     switch (slice.type) {
       case 'focus': return '时间管理';
       case 'timer': return '节奏调整';
@@ -206,7 +208,7 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
               {/* Header: A E T H E R 提醒 · 分类 ✨ */}
               <div className="flex items-center justify-center gap-1.5 mb-2">
                 <span className="text-[11px] font-bold tracking-widest uppercase text-zinc-400 dark:text-zinc-500">
-                  A E T H E R 提醒 · {getCategoryLabel(currentSlice)}
+                  {currentSlice.isStaticHub ? 'A E T H E R 全景' : 'A E T H E R 提醒'} · {getCategoryLabel(currentSlice)}
                 </span>
                 <Sparkles size={12} className="text-zinc-400 dark:text-zinc-400" />
               </div>

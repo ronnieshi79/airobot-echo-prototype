@@ -45,8 +45,8 @@ import { GoogleGenAI, Modality, LiveServerMessage } from "@google/genai";
 import { HomeMenu } from './components/HomeMenu';
 import { AlarmView, TimeView, useClock, TimeOverlay, AlarmOverlay, LogbookOverlay } from './clock';
 import { AetherRobot, useAether } from './airobot';
-import { useSchedule, CalendarHomeView, CalendarFlexView, CalendarListView, SchedulePlannerOverlay, CalendarReminderOverlay, getTodayInfo } from './calendar';
-import { usePodcast, PodcastHomeView, PodcastPlayerView, PodcastLibraryView, PodcastSubscribeView, PodcastOverlay } from './podcast';
+import { useSchedule, CalendarHomeView, CalendarFlexView, CalendarListView, SchedulePlannerOverlay, CalendarReminderOverlay, CalendarMonthOverlay, getTodayInfo } from './calendar';
+import { usePodcast, PodcastHomeView, PodcastPlayerView, PodcastLibraryView, PodcastSubscribeView, PodcastOverlay, PodcastLibraryOverlay } from './podcast';
 import { MainCategory, SubCategory, ScheduleItem, TodoItem, Message, AlarmItem, ActiveCard } from './types';
 import { SkeuomorphicDial } from './components/SkeuomorphicDial';
 import { FunctionalModulePlate } from './components/FunctionalModulePlate';
@@ -66,7 +66,7 @@ const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 export default function App() {
   const [mainCategory, setMainCategory] = useState<MainCategory>('time');
   const [subCategory, setSubCategory] = useState<SubCategory>('home');
-  const [activeOverlay, setActiveOverlay] = useState<'focus' | 'timer' | 'alarm' | 'podcast' | 'logbook' | null>(null);
+  const [activeOverlay, setActiveOverlay] = useState<'focus' | 'timer' | 'alarm' | 'podcast' | 'logbook' | 'podcast_library' | 'calendar_flex' | null>(null);
   const [activeReminder, setActiveReminder] = useState<{ type: 'schedule' | 'todo'; item: ScheduleItem | TodoItem } | null>(null);
   const [activePresetId, setActivePresetId] = useState<string | null>(null);
   const [isPlannerOpen, setIsPlannerOpen] = useState(false);
@@ -1429,6 +1429,42 @@ export default function App() {
         onAskAether={(topic) => {
           setIsChatOpen(true);
           handleRobotChat(`关于《${topic}》，我想了解更多...`);
+        }}
+      />
+
+      {/* Static Hub Overlays: AI Podcast Knowledge Library & Monthly Matrix */}
+      <PodcastLibraryOverlay
+        show={activeOverlay === 'podcast_library'}
+        onClose={() => setActiveOverlay(null)}
+        isDarkMode={isDarkMode}
+        episodes={episodes}
+        onSelectEpisode={(ep) => {
+          setActiveEpisode(ep);
+          setActiveOverlay('podcast');
+        }}
+        onGenerate={(type) => {
+          generateEpisode(type);
+          setActiveOverlay('podcast');
+        }}
+        time={time}
+        schedules={schedules}
+        onAddCustomEpisode={addCustomEpisode}
+      />
+
+      <CalendarMonthOverlay
+        show={activeOverlay === 'calendar_flex'}
+        onClose={() => setActiveOverlay(null)}
+        isDarkMode={isDarkMode}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        todos={todos}
+        schedules={schedules}
+        time={time}
+        onToggleTodo={toggleTodo}
+        onShowPlanner={(item, date) => {
+          if (date) setSelectedDate(date);
+          setPlannerInitialItem(item);
+          setIsPlannerOpen(true);
         }}
       />
 

@@ -6,6 +6,7 @@ export * from './CalendarListView';
 // Overlays & Skeuomorphic Cards
 export * from './SchedulePlannerOverlay';
 export * from './CalendarReminderOverlay';
+export * from './CalendarMonthOverlay';
 
 // Modular Subcomponents (UI Components)
 export * from './components/CalendarAetherTip';

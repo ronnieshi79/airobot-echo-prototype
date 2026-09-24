@@ -4,3 +4,4 @@ export * from './PodcastLibraryView';
 export * from './PodcastPlayerView';
 export * from './PodcastSubscribeView';
 export * from './PodcastOverlay';
+export * from './PodcastLibraryOverlay';

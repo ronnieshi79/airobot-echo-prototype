@@ -163,6 +163,100 @@ export function computeDynamicLiveSlices(params: ContextComputationParams): Serv
   return liveSlices;
 }
 
+/**
+ * Helper to build Static Hub Card: AI 播客节目库 (Podcast Knowledge Library)
+ * 全景知识资产沉淀、多分类探索、定制生成
+ */
+export function buildStaticPodcastLibrarySlice(params: ContextComputationParams): ServiceSlice {
+  const count = params.episodes?.length || 8;
+  const isBreakOrNight = params.context === 'afternoon_break' || params.context === 'night_healing';
+
+  let reason = '全局音频知识资产已就绪，空闲与通勤时可随时探索长篇深度思想';
+  if (params.context === 'afternoon_break') {
+    reason = '午后能量低谷期，适合在微歇时戴上耳机探索音频知识库，吸收深度产业内参';
+  } else if (params.context === 'night_healing') {
+    reason = '夜间休整时段，知识库收纳了优质思辨与沉浸声景，助您平缓思绪沉淀整日认知';
+  } else if (params.context === 'active_energy') {
+    reason = '运动与体能训练期间，戴上耳机畅享高燃节拍与科技内参音频';
+  }
+
+  return {
+    id: 'static-hub-podcast-library',
+    type: 'podcast',
+    title: 'AI 播客节目库与专题合辑',
+    description: `收录科技前沿、战略推演、商业深访等 ${count} 期沉浸内参，支持快速定制生成`,
+    iconType: 'library',
+    badge: '知识节目库',
+    isStaticHub: true,
+    colorTheme: {
+      iconBg: 'bg-violet-100/80',
+      iconColor: 'text-violet-700',
+      pillBg: 'bg-violet-50',
+      pillText: 'text-violet-700',
+    },
+    subdial: {
+      label: '知识节目库',
+      value: `${count} 专题`,
+      subtext: isBreakOrNight ? '深度内参' : '分类合辑',
+      dotColor: 'bg-violet-500',
+    },
+    targetOverlay: 'podcast_library',
+    recommendedActionText: '节目库卡片',
+    recommendationReason: reason
+  };
+}
+
+/**
+ * Helper to build Static Hub Card: AI 月历卡片 (AI Monthly Matrix)
+ * 整月宏观战略全景、日程密度、关键里程碑交付节点
+ */
+export function buildStaticCalendarMonthSlice(params: ContextComputationParams): ServiceSlice {
+  const monthName = `${params.now.getMonth() + 1}月`;
+  const monthSchedulesCount = params.schedules?.length || 0;
+  const dayOfWeek = params.now.getDay();
+  const dayOfMonth = params.now.getDate();
+
+  // Smart Context Perception for Monthly Calendar
+  let reason = `高管视角宏观全局，本月已有 ${monthSchedulesCount} 项重点日程与战略节点锁定`;
+  let subtext = `${monthSchedulesCount}项排期`;
+
+  if (dayOfWeek === 1) {
+    reason = `周一战略全局对齐：纵览${monthName}重点交付期与跨周高管会议，从容统领本周战局`;
+    subtext = '周初全局对齐';
+  } else if (dayOfMonth >= 25) {
+    reason = `月末战略冲刺期：核对${monthName}交付达成大盘与各项目收官节奏`;
+    subtext = '月末收官大盘';
+  } else if (params.context === 'evening_review') {
+    reason = `暮色战略复盘：从单日微观执行抽离，纵览${monthName}全月里程碑推进进度`;
+    subtext = '战略进度对齐';
+  }
+
+  return {
+    id: 'static-hub-calendar-month',
+    type: 'calendar',
+    title: `${monthName}全景月历与战略里程碑`,
+    description: `纵览全月关键交付期与高管会议分布，掌控宏观工作与生活节奏`,
+    iconType: 'calendar',
+    badge: '月度全景',
+    isStaticHub: true,
+    colorTheme: {
+      iconBg: 'bg-indigo-100/80',
+      iconColor: 'text-indigo-700',
+      pillBg: 'bg-indigo-50',
+      pillText: 'text-indigo-700',
+    },
+    subdial: {
+      label: '月度全景',
+      value: `${monthName}全局`,
+      subtext,
+      dotColor: 'bg-indigo-500',
+    },
+    targetOverlay: 'calendar_flex',
+    recommendedActionText: '月历卡片',
+    recommendationReason: reason
+  };
+}
+
 function computeDeepWorkSlices(params: ContextComputationParams): ServiceSlice[] {
   const { schedules, todos, episodes, now, isFocusRunning, isTimerRunning } = params;
   const todayDayOfWeek = now.getDay();
@@ -225,6 +319,12 @@ function computeDeepWorkSlices(params: ContextComputationParams): ServiceSlice[]
       ? `即将进行的日程：${firstPendingSchedule.title || firstPendingSchedule.task}，建议确认规划` 
       : '下午评审会议即将开始，建议打开日程确认待办事项'
   });
+
+  // Static Hub 1: AI Monthly Matrix (Strategic Macro Calendar)
+  slices.push(buildStaticCalendarMonthSlice(params));
+
+  // Static Hub 2: AI Podcast Knowledge Library
+  slices.push(buildStaticPodcastLibrarySlice(params));
 
   if (!isTimerRunning) {
     slices.push({
@@ -333,6 +433,7 @@ function computeMorningWakeSlices(params: ContextComputationParams): ServiceSlic
       recommendedActionText: '日程卡片',
       recommendationReason: '建议先花 2 分钟查看今日日程清单，明确最重要的 3 件事'
     },
+    buildStaticCalendarMonthSlice(params),
     {
       id: 'morning-podcast',
       type: 'podcast',
@@ -357,6 +458,7 @@ function computeMorningWakeSlices(params: ContextComputationParams): ServiceSlic
       recommendedActionText: '播客卡片',
       recommendationReason: '洗漱用餐时间，不妨戴上耳机聆听 10 分钟晨间行业速报'
     },
+    buildStaticPodcastLibrarySlice(params),
     {
       id: 'morning-timer',
       type: 'timer',
@@ -436,6 +538,7 @@ function computeAfternoonBreakSlices(params: ContextComputationParams): ServiceS
       recommendedActionText: '播客卡片',
       recommendationReason: '搭配雨声白噪音小憩，让大脑神经得到彻底放松'
     },
+    buildStaticPodcastLibrarySlice(params),
     {
       id: 'afternoon-schedule',
       type: 'calendar',
@@ -458,7 +561,8 @@ function computeAfternoonBreakSlices(params: ContextComputationParams): ServiceS
       targetOverlay: 'planner',
       recommendedActionText: '日程卡片',
       recommendationReason: '小憩醒来后，快速预览下午日程，有条不紊启动下半天工作'
-    }
+    },
+    buildStaticCalendarMonthSlice(params)
   ];
 }
 
@@ -490,6 +594,7 @@ function computeEveningReviewSlices(params: ContextComputationParams): ServiceSl
       recommendedActionText: '日程卡片',
       recommendationReason: '日落暮色渐浓，花 3 分钟复盘今日待办，收获满满成就感'
     },
+    buildStaticCalendarMonthSlice(params),
     {
       id: 'evening-logbook',
       type: 'logbook',
@@ -513,6 +618,7 @@ function computeEveningReviewSlices(params: ContextComputationParams): ServiceSl
       recommendedActionText: '记事本卡片',
       recommendationReason: '查看今日 AI 记事本专注总时长与效率分析'
     },
+    buildStaticPodcastLibrarySlice(params),
     {
       id: 'evening-podcast',
       type: 'podcast',
@@ -540,7 +646,7 @@ function computeEveningReviewSlices(params: ContextComputationParams): ServiceSl
   ];
 }
 
-function computeNightHealingSlices(): ServiceSlice[] {
+function computeNightHealingSlices(params: ContextComputationParams): ServiceSlice[] {
   return [
     {
       id: 'night-alarm',
@@ -589,6 +695,8 @@ function computeNightHealingSlices(): ServiceSlice[] {
       recommendedActionText: '播客卡片',
       recommendationReason: '开启睡前沉浸助眠播客，让温暖声线陪伴安然入睡'
     },
+    buildStaticPodcastLibrarySlice(params),
+    buildStaticCalendarMonthSlice(params),
     {
       id: 'night-timer',
       type: 'timer',
@@ -615,7 +723,7 @@ function computeNightHealingSlices(): ServiceSlice[] {
   ];
 }
 
-function computeActiveEnergySlices(): ServiceSlice[] {
+function computeActiveEnergySlices(params: ContextComputationParams): ServiceSlice[] {
   return [
     {
       id: 'active-timer',
@@ -664,6 +772,7 @@ function computeActiveEnergySlices(): ServiceSlice[] {
       recommendedActionText: '播客卡片',
       recommendationReason: '运动时戴上耳机，让节奏播客助你突破运动瓶颈'
     },
+    buildStaticPodcastLibrarySlice(params),
     {
       id: 'active-schedule',
       type: 'calendar',
@@ -686,7 +795,8 @@ function computeActiveEnergySlices(): ServiceSlice[] {
       targetOverlay: 'planner',
       recommendedActionText: '日程卡片',
       recommendationReason: '完成运动后，记得在日程中打卡记录运动成果'
-    }
+    },
+    buildStaticCalendarMonthSlice(params)
   ];
 }
 
@@ -711,10 +821,10 @@ export function computeContextSlices(params: ContextComputationParams): ContextC
       presetSlices = computeEveningReviewSlices(params);
       break;
     case 'night_healing':
-      presetSlices = computeNightHealingSlices();
+      presetSlices = computeNightHealingSlices(params);
       break;
     case 'active_energy':
-      presetSlices = computeActiveEnergySlices();
+      presetSlices = computeActiveEnergySlices(params);
       break;
   }
 
