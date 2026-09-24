@@ -8,8 +8,7 @@ import {
   Calendar, 
   Headphones, 
   Bell, 
-  BookOpen,
-  ArrowRight
+  BookOpen
 } from 'lucide-react';
 import { ServiceSlice } from './types';
 
@@ -238,34 +237,7 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
         </button>
       </div>
 
-      {/* Context Recommendation Banner / Reason Pill */}
-      <motion.div
-        key={`reason-${currentSlice.id}`}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className={`mt-6 px-6 py-2.5 rounded-full backdrop-blur-xl border flex items-center gap-4 shadow-sm max-w-[620px] ${
-          isDarkMode 
-            ? 'bg-slate-900/80 border-white/10 text-slate-300' 
-            : 'bg-white/80 border-white/80 text-slate-700 shadow-[0_8px_20px_rgba(20,110,80,0.04)]'
-        }`}
-      >
-        <span className="text-xs font-semibold truncate flex-1 text-center sm:text-left">
-          {currentSlice.recommendationReason}
-        </span>
-        <button
-          onClick={() => onOpenSlice(currentSlice)}
-          className={`text-xs font-bold px-3 py-1 rounded-full transition-all shrink-0 flex items-center gap-1 cursor-pointer ${
-            isDarkMode 
-              ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30' 
-              : 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20'
-          }`}
-        >
-          <span>{currentSlice.recommendedActionText}</span>
-          <ArrowRight size={12} />
-        </button>
-      </motion.div>
-
     </div>
   );
 };
+

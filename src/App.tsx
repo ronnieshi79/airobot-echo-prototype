@@ -393,20 +393,96 @@ export default function App() {
     ringingAlarmId,
   });
 
+  // Register Functional Card Driver Delegate with AgentService
+  useEffect(() => {
+    agentService.registerCardDriver({
+      openOverlay: (overlay) => {
+        if (overlay === 'planner') {
+          setIsPlannerOpen(true);
+        } else {
+          setActiveOverlay(overlay);
+        }
+      },
+      closeOverlay: () => {
+        setActiveOverlay(null);
+        setIsPlannerOpen(false);
+        setRingingAlarmId(null);
+      },
+      startFocus: (seconds) => {
+        if (seconds) {
+          setTotalFocusSeconds(seconds);
+          setFocusTime(seconds);
+        }
+        setIsFocusRunning(true);
+      },
+      pauseFocus: () => {
+        setIsFocusRunning(false);
+      },
+      resetFocus: () => {
+        setIsFocusRunning(false);
+        setFocusTime(totalFocusSeconds);
+      },
+      startTimer: (seconds) => {
+        if (seconds) {
+          setTotalTimerSeconds(seconds);
+          setTimerSeconds(seconds);
+        }
+        setIsTimerRunning(true);
+      },
+      pauseTimer: () => {
+        setIsTimerRunning(false);
+      },
+      resetTimer: () => {
+        setIsTimerRunning(false);
+        setTimerSeconds(totalTimerSeconds);
+      },
+      dismissAlarm: () => {
+        setRingingAlarmId(null);
+      },
+      playPodcast: (episodeId) => {
+        if (episodeId) {
+          const ep = episodes.find(e => e.id === episodeId);
+          if (ep) {
+            setActiveEpisode(ep);
+            if (!isPlaying) togglePlay();
+          }
+        } else if (!isPlaying) {
+          togglePlay();
+        }
+      },
+      pausePodcast: () => {
+        if (isPlaying) togglePlay();
+      },
+      generatePodcastEpisode: (type, topic) => {
+        generateEpisode(type, topic);
+      },
+      openPlanner: (item) => {
+        setPlannerInitialItem(item);
+        setIsPlannerOpen(true);
+      },
+      setContext: (ctx) => {
+        setSelectedContext(ctx);
+      }
+    });
+
+    return () => {
+      agentService.unregisterCardDriver();
+    };
+  }, [totalFocusSeconds, totalTimerSeconds, episodes, isPlaying, togglePlay, setActiveEpisode, generateEpisode, setSelectedContext]);
+
   const handleOpenSlice = (slice: ServiceSlice) => {
-    if (slice.targetOverlay === 'planner') {
-      setIsPlannerOpen(true);
-    } else {
-      setActiveOverlay(slice.targetOverlay);
-    }
+    agentService.driveCardService({ type: 'OPEN_CARD', target: slice.targetOverlay });
   };
 
   const handleRobotChat = async (prompt: string, type: 'general' | 'knowledge' | 'story' | 'news' | 'timer' | 'focus' | 'alarm' = 'general', systemInstruction?: string) => {
     // Intent detection for Chat scenarios and other modules
     if (type === 'knowledge' || type === 'story' || type === 'news') {
       const mappedType = type === 'story' ? 'video' : type === 'news' ? 'text' : 'audio';
-      generateEpisode(mappedType, prompt);
-      setActiveOverlay('podcast');
+      agentService.driveCardService({
+        type: 'PLAY_PODCAST',
+        generateType: mappedType,
+        topic: prompt
+      });
       return;
     }
     
@@ -641,7 +717,7 @@ export default function App() {
         }
         if (finalStr) {
            console.log("Submitting final STT to Live API via sendText");
-           const intent = processFunctionalIntent(finalStr);
+           const intent = agentService.processUserIntent(finalStr, activeOverlay);
            if (intent.isClosing) {
              shouldCloseRef.current = true;
            }
@@ -704,76 +780,12 @@ export default function App() {
     setSuggestions(getAiPromptSuggestions());
   }, [mainCategory, subCategory, activeOverlay]);
 
-  const processFunctionalIntent = (text: string) => {
-    const lowerText = text.toLowerCase();
-    
-    // Intent detection for closing
-    const isClosingIntent = ['好的', '知道了', '拜拜', '再见', '退出', '关闭', '没事了', '直到了', '停止', '休息吧'].some(k => lowerText.includes(k));
-    
-    if (isClosingIntent) {
-      if (activeOverlay === 'timer') {
-        setIsTimerRunning(false);
-        setTimerSeconds(totalTimerSeconds);
-        setActiveOverlay(null);
-      } else if (activeOverlay === 'focus') {
-        setIsFocusRunning(false);
-        setFocusTime(totalFocusSeconds);
-        setActiveOverlay(null);
-      } else if (activeOverlay === 'alarm') {
-        setRingingAlarmId(null);
-        setActiveOverlay(null);
-      }
-      return { isClosing: true, handled: true };
-    }
-
-    if (lowerText.includes("暂停")) {
-      if (activeOverlay === 'timer') setIsTimerRunning(false);
-      else if (activeOverlay === 'focus') setIsFocusRunning(false);
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("继续") || lowerText.includes("开始计时") || lowerText.includes("开始专注")) {
-      if (activeOverlay === 'timer') setIsTimerRunning(true);
-      else if (activeOverlay === 'focus') setIsFocusRunning(true);
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("闹钟") || lowerText.includes("叫醒")) {
-      setMainCategory('time');
-      setSubCategory('alarm');
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("计时") || lowerText.includes("倒计时") || lowerText.includes("秒表")) {
-      setMainCategory('time');
-      setSubCategory('timer');
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("专注") || lowerText.includes("番茄钟")) {
-      setMainCategory('time');
-      setSubCategory('timer');
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("日程") || lowerText.includes("安排") || lowerText.includes("待办")) {
-      setMainCategory('calendar');
-      setSubCategory('today');
-      return { isClosing: false, handled: true };
-    }
-
-    if (lowerText.includes("故事") || lowerText.includes("讲一个") || lowerText.includes("听个")) {
-      generateEpisode('video', lowerText);
-      setActiveOverlay('podcast');
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("资讯") || lowerText.includes("新闻") || lowerText.includes("最近发生")) {
-      generateEpisode('text', lowerText);
-      setActiveOverlay('podcast');
-      return { isClosing: false, handled: true };
-    } else if (lowerText.includes("知识") || lowerText.includes("科普") || lowerText.includes("学习")) {
-      generateEpisode('audio', lowerText);
-      setActiveOverlay('podcast');
-      return { isClosing: false, handled: true };
-    }
-
-    return { isClosing: false, handled: false };
-  };
-
   const handleUserMessage = async (text: string, systemInstruction?: string) => {
     setLastInteractionTime(Date.now());
     agentService.initAudio(); // Explicitly init audio context on user interaction
     
-    const intent = processFunctionalIntent(text);
+    // Agent Service automatically drives cards based on context and natural language intent
+    const intent = agentService.processUserIntent(text, activeOverlay);
 
     setMessages(prev => {
       const newMessages = [...prev, { role: 'user', text }];

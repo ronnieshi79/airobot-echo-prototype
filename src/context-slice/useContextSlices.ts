@@ -3,8 +3,8 @@ import {
   ContextType,
   ServiceSlice,
   ContextComputationParams
-} from './types';
-import { detectAutoContext, getContextServiceSlices } from './contextEngine';
+} from '../services/agent/types';
+import { agentService } from '../services/agent/agentService';
 
 export interface UseContextSlicesProps extends Omit<ContextComputationParams, 'context'> {
   initialContext?: ContextType | 'auto';
@@ -49,13 +49,13 @@ export function useContextSlices(props: UseContextSlicesProps): UseContextSlices
   const [selectedContext, setSelectedContext] = useState<ContextType | 'auto'>(initialContext);
   const [activeSliceIndex, setActiveSliceIndex] = useState(0);
 
-  // Compute effective context: if 'auto', use detectAutoContext(now)
+  // Compute effective context via agentService
   const isAuto = selectedContext === 'auto';
-  const effectiveContext: ContextType = isAuto ? detectAutoContext(now) : selectedContext;
+  const effectiveContext: ContextType = isAuto ? agentService.detectContext(now) : selectedContext;
 
-  // Memoized computation of service slices via contextEngine
+  // Memoized computation of service slices via agentService
   const { slices, primaryReason, primaryAction, activeLiveSlice } = useMemo(() => {
-    return getContextServiceSlices({
+    return agentService.computeContext({
       context: effectiveContext,
       now,
       schedules,
