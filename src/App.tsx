@@ -58,6 +58,7 @@ import {
   ServiceSlice, 
   ContextType 
 } from './context-slice';
+import { getContextTheme } from './theme/contextThemes';
 
 // Initialize Gemini
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
@@ -65,7 +66,6 @@ const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 export default function App() {
   const [mainCategory, setMainCategory] = useState<MainCategory>('time');
   const [subCategory, setSubCategory] = useState<SubCategory>('home');
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeOverlay, setActiveOverlay] = useState<'focus' | 'timer' | 'alarm' | 'podcast' | 'logbook' | null>(null);
   const [activeReminder, setActiveReminder] = useState<{ type: 'schedule' | 'todo'; item: ScheduleItem | TodoItem } | null>(null);
   const [activePresetId, setActivePresetId] = useState<string | null>(null);
@@ -392,6 +392,10 @@ export default function App() {
     activeEpisode,
     ringingAlarmId,
   });
+
+  // Context-Driven Algorithmic Theme: lighting, atmosphere, and colors are dynamically governed by the current context
+  const currentTheme = getContextTheme(effectiveContext);
+  const isDarkMode = currentTheme.isDark;
 
   // Register Functional Card Driver Delegate with AgentService
   useEffect(() => {
@@ -1166,13 +1170,13 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-500 overflow-hidden relative select-none ${isDarkMode ? 'bg-mint-dark text-slate-100' : 'bg-mint-light text-slate-800'}`}>
+    <div className={`min-h-screen flex flex-col items-center justify-center p-4 transition-all duration-700 overflow-hidden relative select-none ${currentTheme.bgClass} ${currentTheme.textPrimary}`}>
       
-      {/* Soft Ambient Pastel Mint Atmosphere Matching Screenshot */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute -top-24 -left-20 w-[500px] h-[500px] rounded-full blur-[140px] opacity-40 ${isDarkMode ? 'bg-emerald-950/50' : 'bg-[#c5f2de]/60'}`}></div>
-        <div className={`absolute bottom-0 -right-20 w-[600px] h-[600px] rounded-full blur-[140px] opacity-30 ${isDarkMode ? 'bg-teal-950/40' : 'bg-[#d8f6e9]/50'}`}></div>
-        <div className={`absolute top-1/3 right-1/4 w-72 h-72 rounded-full blur-[90px] opacity-25 ${isDarkMode ? 'bg-cyan-950/40' : 'bg-white'}`}></div>
+      {/* Context-Adaptive Ambient Light Atmosphere (Changes dynamically per context) */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden transition-all duration-700">
+        <div className={`absolute -top-24 -left-20 w-[520px] h-[520px] rounded-full blur-[140px] transition-all duration-700 opacity-40 ${currentTheme.orb1Class}`}></div>
+        <div className={`absolute bottom-0 -right-20 w-[620px] h-[620px] rounded-full blur-[140px] transition-all duration-700 opacity-35 ${currentTheme.orb2Class}`}></div>
+        <div className={`absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-[100px] transition-all duration-700 opacity-25 ${currentTheme.orb3Class}`}></div>
       </div>
 
       {/* Header Info (Matching screenshot: Logo + AI Echo + "你的每次需求，皆有温暖回响" on Left, Status on Right) */}
@@ -1212,7 +1216,7 @@ export default function App() {
         />
       </main>
 
-      {/* Bottom-Left: Context Selector Pill ("☀️ 深度工作 ⌃") & Theme Switch */}
+      {/* Bottom-Left: Context & Dynamic Theme Pill (Redundant manual theme switch removed) */}
       <div className="fixed bottom-8 left-10 z-30 flex items-center gap-3 select-none">
         <ContextSelector
           currentContext={effectiveContext}
@@ -1220,17 +1224,6 @@ export default function App() {
           onSelectContext={setSelectedContext}
           isDarkMode={isDarkMode}
         />
-        <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          title="切换明暗主题"
-          className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-sm border cursor-pointer ${
-            isDarkMode 
-              ? 'bg-slate-900/80 border-white/10 text-amber-400 hover:bg-slate-800' 
-              : 'bg-white/80 border-white/90 text-slate-600 hover:bg-white shadow-[0_4px_12px_rgba(0,0,0,0.03)]'
-          }`}
-        >
-          {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
-        </button>
       </div>
 
       {/* Right Column: Airobot with 5 Cyan Dots & Voice Dialogue (Matching Figure 2 Red Box position in lower-right) */}
