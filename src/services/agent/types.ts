@@ -36,6 +36,15 @@ export interface ColorTheme {
   glowColor?: string;
 }
 
+export interface SubdialMeta {
+  label: string;
+  value: string;
+  subtext?: string;
+  dotColor?: string;
+  accentColor?: string;
+  waveform?: boolean;
+}
+
 export interface ServiceSlice {
   id: string;
   type: SliceType;
@@ -44,6 +53,7 @@ export interface ServiceSlice {
   iconType: 'timer' | 'focus' | 'calendar' | 'podcast' | 'alarm' | 'logbook';
   badge?: string;
   colorTheme: ColorTheme;
+  subdial?: SubdialMeta;
   isLiveDynamic?: boolean;
   liveStatusText?: string;
   targetOverlay: 'focus' | 'timer' | 'alarm' | 'podcast' | 'logbook' | 'planner';
