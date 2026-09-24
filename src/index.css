@@ -21,24 +21,24 @@
     background: radial-gradient(circle at 50% 35%, #152223 0%, #0d181a 55%, #070d0f 100%);
   }
 
-  /* 6 Context-Driven Ambient Themes */
+  /* 6 Context-Driven Ambient Themes - Executive Neutral Palettes */
   .bg-morning-wake {
-    background: radial-gradient(circle at 50% 35%, #fffdf8 0%, #fef7ed 50%, #faecda 100%);
+    background: radial-gradient(circle at 50% 30%, #faf8f5 0%, #f3f0ea 50%, #eae5dc 100%);
   }
   .bg-deep-work {
-    background: radial-gradient(circle at 50% 35%, #f6fcf9 0%, #ebf8f2 55%, #e1f5ed 100%);
+    background: radial-gradient(circle at 50% 35%, #f8f9fa 0%, #f1f3f6 50%, #e6eaf0 100%);
   }
   .bg-afternoon-break {
-    background: radial-gradient(circle at 50% 35%, #f7fbf9 0%, #edf7f3 50%, #dfefe7 100%);
+    background: radial-gradient(circle at 50% 35%, #f7f8f6 0%, #eff1ee 50%, #e3e6e1 100%);
   }
   .bg-evening-review {
-    background: radial-gradient(circle at 50% 35%, #faf8fe 0%, #f1ecfc 50%, #e6dcf9 100%);
+    background: radial-gradient(circle at 50% 35%, #f8f7f5 0%, #f1efe9 50%, #e6e3dd 100%);
   }
   .bg-night-healing {
-    background: radial-gradient(circle at 50% 35%, #111728 0%, #0a0d18 55%, #04060c 100%);
+    background: radial-gradient(circle at 50% 35%, #131519 0%, #0d0f12 55%, #07080a 100%);
   }
   .bg-active-energy {
-    background: radial-gradient(circle at 50% 35%, #fff9f6 0%, #fef2ec 50%, #fde6dc 100%);
+    background: radial-gradient(circle at 50% 35%, #fafafa 0%, #f1f3f5 50%, #e6e8ec 100%);
   }
   .neu-flat-light {
     background: #f0f2f5;

@@ -55,15 +55,15 @@ export const ContextSelector: React.FC<ContextSelectorProps> = ({
                 : 'bg-white/95 border-slate-200/70 text-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.1)]'
             }`}
           >
-            <div className="px-3 py-2 border-b border-slate-100/50 dark:border-slate-800/50 mb-1.5 flex items-center justify-between">
+            <div className="px-3 py-2 border-b border-zinc-100/60 dark:border-zinc-800/60 mb-1.5 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
                   情境与动态主题
                 </span>
-                <Sparkles size={11} className="text-amber-500 animate-pulse" />
+                <Sparkles size={11} className="text-zinc-400 dark:text-zinc-500" />
               </div>
               {isAuto && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                   自动感知中
                 </span>
               )}
@@ -77,8 +77,8 @@ export const ContextSelector: React.FC<ContextSelectorProps> = ({
               }}
               className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                 isAuto 
-                  ? (isDarkMode ? 'bg-white/10 text-cyan-400' : 'bg-emerald-50 text-emerald-700') 
-                  : 'hover:bg-black/5 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400'
+                  ? (isDarkMode ? 'bg-white/10 text-zinc-100' : 'bg-zinc-100 text-zinc-900') 
+                  : 'hover:bg-black/5 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400'
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -91,7 +91,7 @@ export const ContextSelector: React.FC<ContextSelectorProps> = ({
               {isAuto && <Check size={14} />}
             </button>
 
-            <div className="h-px bg-slate-100/60 dark:bg-slate-800/60 my-1.5" />
+            <div className="h-px bg-zinc-100/60 dark:bg-zinc-800/60 my-1.5" />
 
             {/* Context & Theme List */}
             <div className="space-y-1">
@@ -107,8 +107,8 @@ export const ContextSelector: React.FC<ContextSelectorProps> = ({
                     }}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                       isSelected
-                        ? (isDarkMode ? 'bg-white/10 text-cyan-400' : 'bg-slate-100 text-slate-900')
-                        : 'hover:bg-black/5 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400'
+                        ? (isDarkMode ? 'bg-white/10 text-zinc-100' : 'bg-zinc-100 text-zinc-900')
+                        : 'hover:bg-black/5 dark:hover:bg-white/5 text-zinc-600 dark:text-zinc-400'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">

@@ -68,7 +68,7 @@ export function computeDynamicLiveSlices(params: ContextComputationParams): Serv
       liveStatusText: '响铃中',
       targetOverlay: 'alarm',
       recommendedActionText: '闹钟卡片',
-      recommendationReason: '闹钟正在响铃中，点击卡片以停止或开启稍后提醒'
+      recommendationReason: '闹钟正在响铃中，可直接语音吩咐关闭或开启稍后提醒'
     });
   }
 
@@ -97,7 +97,7 @@ export function computeDynamicLiveSlices(params: ContextComputationParams): Serv
       liveStatusText: formatSec(focusTime),
       targetOverlay: 'focus',
       recommendedActionText: '专注卡片',
-      recommendationReason: `正在专注进行中，剩余 ${formatSec(focusTime)}，点击进入全屏专注沉浸`
+      recommendationReason: `专注心流进行中，当前剩余 ${formatSec(focusTime)}，保持高效沉浸状态`
     });
   }
 
@@ -126,7 +126,7 @@ export function computeDynamicLiveSlices(params: ContextComputationParams): Serv
       liveStatusText: formatSec(timerSeconds),
       targetOverlay: 'timer',
       recommendedActionText: '计时卡片',
-      recommendationReason: `计时器运行中，剩余 ${formatSec(timerSeconds)}，点击查看计时详情`
+      recommendationReason: `计时器运行中，当前剩余 ${formatSec(timerSeconds)}`
     });
   }
 
@@ -156,7 +156,7 @@ export function computeDynamicLiveSlices(params: ContextComputationParams): Serv
       liveStatusText: '正在播放',
       targetOverlay: 'podcast',
       recommendedActionText: '播客卡片',
-      recommendationReason: `正在播放《${activeEpisode.title}》，点击卡片打开播放控制台`
+      recommendationReason: `正在播放《${activeEpisode.title}》，伴随知识与思考流动`
     });
   }
 

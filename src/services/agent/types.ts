@@ -18,12 +18,12 @@ export interface ContextMeta {
 }
 
 export const CONTEXT_PRESETS: ContextMeta[] = [
-  { id: 'deep_work', name: '深度工作', icon: '☀️', description: '高专注心流、阻断打扰、沉浸推演' },
-  { id: 'morning_wake', name: '清晨唤醒', icon: '🌅', description: '晨曦轻柔唤醒、全天日程梳理、晨报速递' },
-  { id: 'afternoon_break', name: '午后小憩', icon: '☕', description: '15分钟闭目养神、白噪音声景、午后备忘' },
-  { id: 'evening_review', name: '暮色复盘', icon: '🌆', description: '待办完成复盘、AI记事本洞察、晚间反思' },
-  { id: 'night_healing', name: '夜间疗愈', icon: '🌙', description: '明日闹钟就绪、助眠故事、睡前远离蓝光' },
-  { id: 'active_energy', name: '活力运动', icon: '🏃', description: '间歇计时、节奏音频、健康运动打卡' }
+  { id: 'morning_wake', name: '晨间开工', icon: '💼', description: '全天议程排期、待办优先级对齐、行业早参速报' },
+  { id: 'deep_work', name: '专注冲刺', icon: '🎯', description: '核心任务攻坚、免打扰沉浸心流、阻断即时消息' },
+  { id: 'afternoon_break', name: '工间充能', icon: '☕', description: '眼部肌肉放松、咖啡小憩、重置大脑认知带宽' },
+  { id: 'active_energy', name: '敏捷协作', icon: '⚡', description: '站会倒计时、头脑风暴研讨、工间体态激活' },
+  { id: 'evening_review', name: '结项复盘', icon: '📊', description: '今日待办清零、产出日志沉淀、明日排期预演' },
+  { id: 'night_healing', name: '离线休养', icon: '🌙', description: '工作通知静默、远离工作蓝光、安神声景解压' }
 ];
 
 export type SliceType = 'focus' | 'timer' | 'calendar' | 'podcast' | 'alarm' | 'logbook';

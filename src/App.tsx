@@ -1179,19 +1179,19 @@ export default function App() {
         <div className={`absolute top-1/3 right-1/4 w-80 h-80 rounded-full blur-[100px] transition-all duration-700 opacity-25 ${currentTheme.orb3Class}`}></div>
       </div>
 
-      {/* Header Info (Matching screenshot: Logo + AI Echo + "你的每次需求，皆有温暖回响" on Left, Status on Right) */}
+      {/* Header Info (Executive Office Aesthetic: Logo + AI Echo + Status) */}
       <header className="fixed top-7 left-10 flex items-center gap-3.5 z-20 select-none">
-        <div className="w-9 h-9 rounded-full bg-violet-100/90 border border-violet-200/80 flex items-center justify-center text-violet-600 shadow-sm">
-          <Sparkles size={18} />
+        <div className="w-9 h-9 rounded-full bg-zinc-100/90 dark:bg-zinc-800/90 border border-zinc-200/80 dark:border-zinc-700/80 flex items-center justify-center text-zinc-700 dark:text-zinc-300 shadow-sm">
+          <Sparkles size={17} />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <span className={`text-base font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+            <span className={`text-base font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
               AI Echo
             </span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_8px_rgba(52,211,153,0.7)]" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
           </div>
-          <p className="text-[11px] text-slate-400 font-medium">
+          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
             你的每次需求，皆有温暖回响
           </p>
         </div>
