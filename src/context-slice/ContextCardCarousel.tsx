@@ -86,7 +86,7 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
     <div className="flex flex-col items-center justify-center relative w-full select-none">
       
       {/* Coverflow Stage - Vertical Card Deck (Framed background slices subtly peeking out) */}
-      <div className="relative w-full max-w-[620px] h-[480px] sm:h-[500px] flex items-center justify-center overflow-visible">
+      <div className="relative w-full max-w-[620px] h-[490px] sm:h-[515px] flex items-center justify-center overflow-visible">
         
         {/* Left Neighbor Card (Delicate 1.5px blur, defined 2px border framing, partially peeking out) */}
         {total > 1 && prevSlice && (
@@ -184,7 +184,7 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
                 onOpenSlice(currentSlice);
               }
             }}
-            className={`relative z-20 w-[340px] sm:w-[380px] md:w-[400px] h-[450px] sm:h-[470px] rounded-[2.8rem] p-7 flex flex-col items-center justify-between text-center cursor-grab active:cursor-grabbing pointer-events-auto transition-all group touch-pan-y ${
+            className={`relative z-20 w-[340px] sm:w-[380px] md:w-[400px] h-[460px] sm:h-[480px] rounded-[2.8rem] px-6 py-6 sm:px-7 sm:py-7 flex flex-col items-center justify-between text-center cursor-grab active:cursor-grabbing pointer-events-auto transition-all group touch-pan-y ${
               isDarkMode 
                 ? 'bg-zinc-900/95 border border-white/15 shadow-[0_24px_55px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.08)]' 
                 : 'bg-gradient-to-b from-white/98 via-[#fcfcfd]/95 to-[#f4f5f8]/95 backdrop-blur-2xl border border-white/95 shadow-[0_24px_55px_rgba(0,0,0,0.06),0_2px_6px_rgba(0,0,0,0.02)]'
@@ -195,34 +195,34 @@ export const ContextCardCarousel: React.FC<ContextCardCarouselProps> = ({
               <div className="absolute -inset-1 rounded-[2.9rem] border-2 border-emerald-500/30 animate-pulse pointer-events-none" />
             )}
 
-            {/* Top Subdial Micro-Appliance */}
-            <div className="flex items-center justify-center shrink-0 pt-1 pointer-events-none">
+            {/* Top Subdial Micro-Appliance (Shifted downwards for balanced optical center) */}
+            <div className="flex items-center justify-center shrink-0 pt-5 sm:pt-7 pointer-events-none">
               <CardSubdial 
                 slice={currentSlice} 
                 isDarkMode={isDarkMode} 
               />
             </div>
 
-            {/* Bottom Section: AETHER Context Insight & Recommendation */}
-            <div className="flex flex-col items-center justify-center flex-1 w-full px-2 pt-3 pointer-events-none">
+            {/* Bottom Section: AETHER Context Insight & Recommendation (Shifted down to anchor comfortably in red circle) */}
+            <div className="flex flex-col items-center justify-end w-full px-2 sm:px-3 pb-1 sm:pb-2 pt-2 pointer-events-none">
               {/* Header: A E T H E R 提醒 · 分类 ✨ */}
-              <div className="flex items-center justify-center gap-1.5 mb-2">
-                <span className="text-[11px] font-bold tracking-widest uppercase text-zinc-400 dark:text-zinc-500">
+              <div className="flex items-center justify-center gap-1.5 mb-1.5">
+                <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-zinc-400 dark:text-zinc-500">
                   {currentSlice.isStaticHub ? 'A E T H E R 全景' : 'A E T H E R 提醒'} · {getCategoryLabel(currentSlice)}
                 </span>
                 <Sparkles size={12} className="text-zinc-400 dark:text-zinc-400" />
               </div>
 
               {/* Title */}
-              <h3 className={`text-lg sm:text-xl font-black tracking-tight leading-snug mb-2 line-clamp-1 max-w-[320px] ${
+              <h3 className={`text-lg sm:text-[1.28rem] font-black tracking-tight leading-snug mb-1.5 line-clamp-1 max-w-[330px] ${
                 isDarkMode ? 'text-white' : 'text-zinc-900'
               }`}>
                 {currentSlice.title}
               </h3>
 
               {/* AI Context Reasoning Advice */}
-              <p className={`text-xs sm:text-[13px] font-normal leading-relaxed line-clamp-3 max-w-[310px] ${
-                isDarkMode ? 'text-zinc-300' : 'text-zinc-600'
+              <p className={`text-xs sm:text-[13px] font-normal leading-relaxed line-clamp-2 max-w-[320px] ${
+                isDarkMode ? 'text-zinc-400' : 'text-zinc-600'
               }`}>
                 {currentSlice.recommendationReason || currentSlice.description}
               </p>

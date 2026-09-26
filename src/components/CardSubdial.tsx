@@ -48,7 +48,7 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
   );
 
   const renderIcon = () => {
-    const iconSize = compact ? 18 : 26;
+    const iconSize = compact ? 18 : 32;
     const iconClass = `${colorTheme.iconColor || 'text-slate-600'} transition-transform group-hover:scale-110`;
 
     if (targetOverlay === 'podcast_library' || slice.iconType === 'library') {
@@ -81,11 +81,11 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
       className={`relative flex flex-col items-center justify-center select-none transition-all duration-300 group ${
         compact 
           ? 'w-28 h-28 rounded-2xl p-2.5' 
-          : 'w-36 h-36 sm:w-44 sm:h-44 rounded-[2rem] p-4 shrink-0'
+          : 'w-[195px] h-[195px] sm:w-[220px] sm:h-[220px] rounded-[2.3rem] p-5 shrink-0'
       } ${
         isDarkMode 
-          ? 'bg-slate-800/90 shadow-[inset_0_2px_6px_rgba(0,0,0,0.4),0_1px_2px_rgba(255,255,255,0.06)] border border-slate-700/80' 
-          : 'bg-gradient-to-b from-slate-50/95 to-slate-100/90 shadow-[inset_0_2px_6px_rgba(0,0,0,0.07),0_2px_5px_rgba(255,255,255,0.9)] border border-slate-200/80'
+          ? 'bg-gradient-to-b from-slate-800/95 via-slate-850/90 to-slate-900/95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_10px_24px_rgba(0,0,0,0.45)] border border-slate-700/80' 
+          : 'bg-gradient-to-b from-white/95 via-slate-50/90 to-slate-100/95 shadow-[inset_0_2px_5px_rgba(255,255,255,1),0_8px_20px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.03)] border border-slate-200/85'
       }`}
     >
       {/* Live Pulsing Glow Ring if active */}
@@ -97,40 +97,40 @@ export const CardSubdial: React.FC<CardSubdialProps> = ({
       )}
 
       {/* Top Icon */}
-      <div className="mb-1 flex items-center justify-center">
+      <div className="mb-1.5 flex items-center justify-center">
         {renderIcon()}
       </div>
 
       {/* Micro Label */}
-      <span className={`font-medium tracking-wider text-center line-clamp-1 ${
+      <span className={`font-semibold tracking-wider text-center line-clamp-1 ${
         compact ? 'text-[10px] mb-0.5' : 'text-xs sm:text-[13px] mb-1'
-      } ${isDarkMode ? 'text-slate-400' : 'text-slate-400'}`}>
+      } ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
         {label}
       </span>
 
       {/* High-Contrast Bold Mono Readout */}
-      <span className={`font-bold font-mono tracking-tight text-center ${
+      <span className={`font-bold font-mono tracking-tight leading-none text-center ${
         compact 
           ? 'text-sm sm:text-base' 
-          : 'text-xl sm:text-2xl'
-      } ${isDarkMode ? 'text-slate-100' : 'text-slate-800'}`}>
+          : 'text-2xl sm:text-[2.15rem] my-1'
+      } ${isDarkMode ? 'text-slate-100' : 'text-slate-850'}`}>
         {value}
       </span>
 
       {/* Subdial Indicator: Waveform or Dots */}
       {subdial?.waveform ? (
-        <div className={`flex items-end gap-0.5 ${compact ? 'mt-1.5 h-2' : 'mt-2 h-2.5'}`}>
-          <span className="w-0.5 h-1.5 bg-violet-400 rounded-full animate-pulse"></span>
-          <span className="w-0.5 h-2.5 bg-violet-500 rounded-full animate-pulse [animation-delay:150ms]"></span>
-          <span className="w-0.5 h-1 bg-violet-400 rounded-full animate-pulse [animation-delay:300ms]"></span>
-          <span className="w-0.5 h-2 bg-violet-500 rounded-full animate-pulse [animation-delay:450ms]"></span>
+        <div className={`flex items-end gap-1 ${compact ? 'mt-1.5 h-2' : 'mt-2.5 sm:mt-3 h-3'}`}>
+          <span className="w-0.5 sm:w-1 h-2 bg-violet-400 rounded-full animate-pulse"></span>
+          <span className="w-0.5 sm:w-1 h-3.5 bg-violet-500 rounded-full animate-pulse [animation-delay:150ms]"></span>
+          <span className="w-0.5 sm:w-1 h-1.5 bg-violet-400 rounded-full animate-pulse [animation-delay:300ms]"></span>
+          <span className="w-0.5 sm:w-1 h-2.5 bg-violet-500 rounded-full animate-pulse [animation-delay:450ms]"></span>
         </div>
       ) : (
-        <div className={`flex items-center gap-1.5 ${compact ? 'mt-1.5' : 'mt-2.5'}`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${subdial?.dotColor || 'bg-orange-500'} ${isLiveDynamic ? 'animate-ping' : ''}`} />
-          <span className={`w-1.5 h-1.5 rounded-full ${isDarkMode ? 'bg-slate-600' : 'bg-slate-300'}`} />
+        <div className={`flex items-center gap-1.5 ${compact ? 'mt-1.5' : 'mt-2.5 sm:mt-3'}`}>
+          <span className={`rounded-full ${compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} ${subdial?.dotColor || 'bg-orange-500'} ${isLiveDynamic ? 'animate-ping' : ''}`} />
+          <span className={`rounded-full ${compact ? 'w-1.5 h-1.5' : 'w-2 h-2'} ${isDarkMode ? 'bg-slate-600' : 'bg-slate-300'}`} />
           {!compact && (
-            <span className={`w-1.5 h-1.5 rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />
+            <span className={`rounded-full w-2 h-2 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />
           )}
         </div>
       )}
